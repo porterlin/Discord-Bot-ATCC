@@ -117,7 +117,7 @@ def job():
             #buf = Soup.find(class_ = 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql ii04i59q').find_all('div')
             #buf = Soup.find(class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a').find_all('div')
             buft = Soup.find_all('div', class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a')
-            buf = buft.find_all('div')
+            buf = buft[0].find_all('div')
             
             buf1 = []
             for i in range(len(buf)):
