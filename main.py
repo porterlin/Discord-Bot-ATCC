@@ -1,4 +1,3 @@
-from turtle import right
 import discord
 from discord.ext import tasks
 from selenium import webdriver
@@ -125,9 +124,9 @@ def job():
             str1 = ''
             str1 = ''.join(buf1)
             
-            right = str1.index('】')
-            text.append(str1[0:right+1]) #分離出標題
-            str1 = str1[right+1:]
+            right1 = str1.index('】')
+            text.append(str1[0:right1+1]) #分離出標題
+            str1 = str1[right1+1:]
 
             global tt
             tt = str1
