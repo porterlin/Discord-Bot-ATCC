@@ -110,7 +110,8 @@ def job():
             driver.get(url)
             time.sleep(1)
 
-            Soup = BeautifulSoup(driver.page_source, 'lxml')
+            Soup = BeautifulSoup(driver.page_source, 'html.parser')
+            time.sleep(5)
         
             global text
             #buf = Soup.find(class_ = 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql ii04i59q').find_all('div')
