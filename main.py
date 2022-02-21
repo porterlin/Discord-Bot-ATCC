@@ -112,6 +112,8 @@ def job():
 
             Soup = BeautifulSoup(driver.page_source, 'html.parser')
             time.sleep(5)
+    
+            driver.get_screenshot_as_file("test.jpg")
         
             global text
             #buf = Soup.find(class_ = 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql ii04i59q').find_all('div')
@@ -145,8 +147,6 @@ def job():
 
                 text.append(tt[:num])
                 tt = tt[num:]
-
-            driver.get_screenshot_as_file("test.jpg")
 
             global index
             index = 1
