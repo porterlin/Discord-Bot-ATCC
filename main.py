@@ -156,7 +156,7 @@ def job():
         if codecp != code:
             code = codecp
             driver.get(codecp)
-            time.sleep(1)
+            time.sleep(5)
     
             driver.get_screenshot_as_file("test.jpg")
 
