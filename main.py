@@ -2,7 +2,6 @@ import discord
 from discord.ext import tasks
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
 import time
 import threading
 import random
@@ -17,6 +16,8 @@ index = 0
 num = 0
 str1 = ""
 tt = ""
+mini = 0
+times = []
 
 @client.event
 async def on_ready():
@@ -54,10 +55,14 @@ async def auto_send():
         await channel.send(file=file,embed=embed)
         index = 0
 
+def cal(llist): #llist=['天', '時', '分', '秒']
+    temp = int(llist[0]) * 24 * 60 * 60 + int(llist[1]) * 60 * 60 + int(llist[2]) * 60 + int(llist[3])
+    return str(temp)
+
 def job():
     while True:
         print("in")
-        account = 'testingtesting@gamil.com'
+        account = 'testingtestinglin@gmail.com'
         password = 'portertest'
 
         #開啟瀏覽器視窗(Chrome)
@@ -89,36 +94,79 @@ def job():
         driver.get('https://www.facebook.com/myatcc')
 
         time.sleep(5)
-        element = driver.find_element_by_class_name('nqmvxvec.j83agx80.jnigpg78.cxgpxx05.dflh9lhu.sj5x9vvc.scb9dxdr.odw8uiq3')
-        element.click()
-        time.sleep(5)
-        element = driver.find_elements_by_class_name('oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w.e9989ue4.r7d6kgcz.p7hjln8o.esuyzwwr.f1sip0of.n00je7tq.arfg74bv.qs9ysxi8.k77z8yql.abiwlrkh.p8dawk7l.lzcic4wl.dwo3fsh8.rq0escxv.nhd2j8a9.j83agx80.btwxx1t3.pfnyh3mw.opuu4ng7.kj2yoqh6.kvgmc6g5.oygrvhab.l9j0dhe7.i1ao9s8h.du4w35lb.bp9cbjyn.cxgpxx05.dflh9lhu.sj5x9vvc.scb9dxdr')[2]
-        element.click()
-        time.sleep(5)
-        element = driver.find_element_by_class_name('oajrlxb2.f1sip0of.hidtqoto.e70eycc3.lzcic4wl.b3i9ofy5.l6v480f0.maa8sdkg.s1tcr66n.aypy0576.beltcj47.p86d2i9g.aot14ch1.kzx2olss.rq0escxv.oo9gr5id.l94mrbxd.ekzkrbhg.cxgpxx05.d1544ag0.sj5x9vvc.tw6a2znq.k4urcfbm.o8yuz56k.duhwxc4d.bs68lrl8.f56r29tw.e16z4an2.ei4baabg.b4hei51z.ehryuci6.hzawbc8m.tv7at329')
+
+        
+        Soup = BeautifulSoup(driver.page_source, 'html.parser')
+        time.sleep(7)
+        timess = Soup.find_all('a', class_ = 'oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 b1v8xokw') #找出所有連結
+        print(timess)
+
+        global times
+        times = []
+        for i in range(len(timess)):
+            times.append(timess[i].get('aria-label'))
+
+        for i in range(len(times)): #轉換成秒
+            if '月' in times[i]:
+                continue
+            
+            ll = ['0', '0', '0', '0']
+            if '分鐘' in times[i]:
+                p = times[i].index('分')
+                part = times[i][:p]
+                ll[2] = part
+                times[i] = cal(ll)
+            elif '小時' in times[i]:
+                p = times[i].index('小')
+                part = times[i][:p]
+                ll[1] = part
+                times[i] = cal(ll)
+            elif '天' in times[i]:
+                p = times[i].index('天')
+                part = times[i][:p]
+                ll[0] = part
+                times[i] = cal(ll)
+        
+        print(times)
+        
+        global mini
+        mini = 1000000
+        for i in range(len(times)): #找出最近的發文時間
+            if '月' in times[i]:
+                continue
+            
+            if i == 0:
+                if int(times[i]) < mini:
+                    mini = i
+            else:
+                if int(times[i]) < int(times[mini]):
+                    mini = i
+        
+        print(mini)
+
         global url
         global code
-        url = element.get_attribute('value')
-        codecp = url[110:126]
+        url = timess[mini].get('href')
+        jj = url.index('?')
+        codecp = url[:jj]
+        url = codecp
+
+        print(codecp)
 
         if codecp != code:
             code = codecp
-            f = open('text.txt', 'w')
-            f.write(code)
-            f.close()
-            url = 'https://www.facebook.com/165317680181335/posts/' + code
-            driver.get(url)
+            driver.get(codecp)
             time.sleep(1)
-
-            Soup = BeautifulSoup(driver.page_source, 'html.parser')
-            time.sleep(5)
     
             driver.get_screenshot_as_file("test.jpg")
+
+            Soup = BeautifulSoup(driver.page_source, 'html.parser')
         
             global text
-            #buf = Soup.find(class_ = 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql ii04i59q').find_all('div')
-            #buf = Soup.find(class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a').find_all('div')
-            buft = Soup.find_all('div', class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a')
+            text = []
+            #buft = Soup.find_all('div', class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a') #找出所有貼文的文章存成list # kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql
+            buft = Soup.findAll('div', {'class':['ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a', 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql']})
+            print(len(buft))
             buf = buft[0].find_all('div')
             
             buf1 = []
@@ -156,11 +204,6 @@ def job():
         delay = random.choice(delay_choices)  #隨機選取秒數
         time.sleep(delay)
 
-
-f = open('text.txt', 'r')
-code = f.read()
-f.close()
-print(code)
 t = threading.Thread(target = job)
 t.start()
 auto_send.start()
