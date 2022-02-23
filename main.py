@@ -73,7 +73,7 @@ def job():
         chrome_options.add_argument("--no-sandbox")
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
-        #driver = webdriver.Chrome('\chromedriver') #windows
+        #driver = webdriver.Chrome('D:\chromedriver') #windows
 
         driver.get('https://www.facebook.com/')
 
@@ -95,6 +95,9 @@ def job():
 
         time.sleep(5)
 
+        for i in range(4):
+            driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+            time.sleep(5)
         
         Soup = BeautifulSoup(driver.page_source, 'html.parser')
         time.sleep(7)
