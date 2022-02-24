@@ -121,7 +121,7 @@ def job():
                 times[i] = cal(ll)
             elif 'm' in times[i]:
                 p = times[i].index('m')
-                part = times[i][:p]
+                part = times[i][:p-1]
                 ll[2] = part
                 times[i] = cal(ll)
             elif '小時' in times[i]:
@@ -131,7 +131,7 @@ def job():
                 times[i] = cal(ll)
             elif 'h' in times[i]:
                 p = times[i].index('h')
-                part = times[i][:p]
+                part = times[i][:p-1]
                 ll[1] = part
                 times[i] = cal(ll)
             elif '天' in times[i]:
@@ -141,7 +141,7 @@ def job():
                 times[i] = cal(ll)
             elif 'd' in times[i]:
                 p = times[i].index('d')
-                part = times[i][:p]
+                part = times[i][:p-1]
                 ll[0] = part
                 times[i] = cal(ll)
         
