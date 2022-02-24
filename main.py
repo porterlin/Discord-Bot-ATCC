@@ -95,7 +95,7 @@ def job():
 
         time.sleep(5)
 
-        for i in range(4):
+        for i in range(3):
             driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
             time.sleep(5)
         
@@ -110,7 +110,7 @@ def job():
             times.append(timess[i].get('aria-label'))
 
         for i in range(len(times)): #轉換成秒
-            if '月' in times[i]:
+            if '月' in times[i] or 'at' in times[i]:
                 continue
             
             ll = ['0', '0', '0', '0']
@@ -119,13 +119,28 @@ def job():
                 part = times[i][:p]
                 ll[2] = part
                 times[i] = cal(ll)
+            elif 'm' in times[i]:
+                p = times[i].index('m')
+                part = times[i][:p]
+                ll[2] = part
+                times[i] = cal(ll)
             elif '小時' in times[i]:
                 p = times[i].index('小')
                 part = times[i][:p]
                 ll[1] = part
                 times[i] = cal(ll)
+            elif 'h' in times[i]:
+                p = times[i].index('h')
+                part = times[i][:p]
+                ll[1] = part
+                times[i] = cal(ll)
             elif '天' in times[i]:
                 p = times[i].index('天')
+                part = times[i][:p]
+                ll[0] = part
+                times[i] = cal(ll)
+            elif 'd' in times[i]:
+                p = times[i].index('d')
                 part = times[i][:p]
                 ll[0] = part
                 times[i] = cal(ll)
@@ -135,7 +150,7 @@ def job():
         global mini
         mini = 1000000
         for i in range(len(times)): #找出最近的發文時間
-            if '月' in times[i]:
+            if '月' in times[i] or 'at' in times[i]:
                 continue
             
             if i == 0:
