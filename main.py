@@ -177,6 +177,10 @@ def job():
             time.sleep(5)
     
             driver.get_screenshot_as_file("test.jpg")
+            
+            for i in range(3):
+                driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+                time.sleep(5)
 
             Soup = BeautifulSoup(driver.page_source, 'html.parser')
         
