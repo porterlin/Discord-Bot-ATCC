@@ -13,11 +13,10 @@ url = "empty"
 text = []
 code = ""
 index = 0
-num = 0
-str1 = ""
-tt = ""
-mini = 0
-times = []
+#month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+#account = 'testingtestinglin@gmail.com'
+account = 'porterwp.tw@gmail.com'
+password = 'portertest'
 
 @client.event
 async def on_ready():
@@ -60,20 +59,20 @@ def cal(llist): #llist=['天', '時', '分', '秒']
     return str(temp)
 
 def job():
+    global account
+    global password
     while True:
-        print("in")
-        account = 'testingtestinglin@gmail.com'
-        password = 'portertest'
-
         #開啟瀏覽器視窗(Chrome)
         chrome_options = webdriver.ChromeOptions()
         chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         chrome_options.add_argument("--headless") #無頭模式
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-notifications")
+        chrome_options.add_argument("--disable-gpu")
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
-        #driver = webdriver.Chrome('D:\chromedriver') #windows
+        #driver = webdriver.Chrome('D:\chromedriver', chrome_options=chrome_options) #windows
 
         driver.get('https://www.facebook.com/')
 
@@ -87,8 +86,10 @@ def job():
         element.send_keys(password)
         time.sleep(1)
 
-        button = driver.find_element_by_class_name('_42ft._4jy0._6lth._4jy6._4jy1.selected._51sy')
-        button.click()
+        element.submit()
+
+        # button = driver.find_element_by_class_name('_42ft._4jy0._6lth._4jy6._4jy1.selected._51sy')
+        # button.click()
         time.sleep(7)
 
         driver.get('https://www.facebook.com/myatcc')
@@ -104,7 +105,7 @@ def job():
         timess = Soup.find_all('a', class_ = 'oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 b1v8xokw') #找出所有連結
         print(timess)
 
-        global times
+        #global month#
         times = []
         for i in range(len(timess)):
             times.append(timess[i].get('aria-label'))
@@ -112,7 +113,7 @@ def job():
         for i in range(len(times)): #轉換成秒
             if '月' in times[i] or 'at' in times[i]:
                 continue
-            
+
             ll = ['0', '0', '0', '0']
             if '分鐘' in times[i]:
                 p = times[i].index('分')
@@ -146,8 +147,7 @@ def job():
                 times[i] = cal(ll)
         
         print(times)
-        
-        global mini
+
         mini = 1000000
         for i in range(len(times)): #找出最近的發文時間
             if '月' in times[i] or 'at' in times[i]:
@@ -157,6 +157,8 @@ def job():
                 if int(times[i]) < mini:
                     mini = i
             else:
+                if mini == 1000000:
+                    mini = i
                 if int(times[i]) < int(times[mini]):
                     mini = i
         
@@ -196,18 +198,14 @@ def job():
                 buf1.append(buf[i].text)
             print(buf1)
 
-            global str1
             str1 = ''
             str1 = ''.join(buf1)
             
             right1 = str1.index('】')
             text.append(str1[0:right1+1]) #分離出標題
-            str1 = str1[right1+1:]
 
-            global tt
-            tt = str1
+            tt = str1[right1+1:]
 
-            global num
             num = 0
             while True:
                 num+=20
@@ -221,7 +219,7 @@ def job():
             global index
             index = 1
             num = 0
-        driver.close()
+        driver.quit()
         delay_choices = [300, 350, 500, 320, 415, 390]  #延遲的秒數
         delay = random.choice(delay_choices)  #隨機選取秒數
         time.sleep(delay)
