@@ -4,7 +4,7 @@
 
 由於 Facebook 爬蟲限制許多，所以先使用 Selenium 模擬人類登入，到達指定頁面後再透過 BeautifulSoup4 將 Html 提取出來分析，取出我們要的資訊後再由 Discord Bot 將收集的資訊傳送至特定頻道，Heroku 則讓我們可以 24 小時運作程式碼
 
-### 使用前設定
+## 使用前設定
 
 ``` python=16
 account = '你的FB帳號'
@@ -46,7 +46,7 @@ driver = webdriver.Chrome('D:\chromedriver') #windows
 
 在 Heroku 運行 chromedriver 可以參考此影片 https://youtu.be/Ven-pqwk3ec
 
-### 介紹
+## 介紹
 
 由於程式分為 Discord bot 部分以及網頁爬蟲，我們使用多執行緒的方法讓子執行緒去處理爬蟲，父執行緒去跑 Discord Bot
 
@@ -58,7 +58,7 @@ driver = webdriver.Chrome('D:\chromedriver') #windows
 
 ![1](https://user-images.githubusercontent.com/65625447/155887923-b435660c-ceb4-4011-abda-f43b66c999a8.jpg)
 
-### 其他
+## 其他
 
 `.fonts` 資料夾存放中文字型，如果沒放的話，在 Heroku 上的螢幕截圖中文字會變亂碼
 
