@@ -56,7 +56,7 @@ driver = webdriver.Chrome('D:\chromedriver') #windows
 
 這邊我根據 ATCC 粉絲專頁的發文架構，擷取出標題、內文、連結以及螢幕截圖當作預覽畫面，發送的結果如下圖
 
-![1](D:\DC Bot\1.jpg)
+![1](https://user-images.githubusercontent.com/65625447/155887923-b435660c-ceb4-4011-abda-f43b66c999a8.jpg)
 
 ### 其他
 
