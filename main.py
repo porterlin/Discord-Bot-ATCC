@@ -13,10 +13,8 @@ url = "empty"
 text = []
 code = ""
 index = 0
-#month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-#account = 'testingtestinglin@gmail.com'
-account = 'porterwp.tw@gmail.com'
-password = 'portertest'
+account = '你的FB帳號'
+password = '你的FB密碼'
 
 @client.event
 async def on_ready():
@@ -30,11 +28,8 @@ async def on_ready():
 async def auto_send():
     global index
     if index == 1:
-        channel = await client.fetch_channel('944300842910093392') #ATCC
-        #channel = await client.fetch_channel('944904236012023860') #DC Bot
+        channel = await client.fetch_channel('要傳送到的頻道id(channel ID)')
         temp = ""
-        print('-------------------------------')
-        print(text)
         for i in range(len(text)):
             if i == 0:
                 continue
@@ -63,16 +58,16 @@ def job():
     global password
     while True:
         #開啟瀏覽器視窗(Chrome)
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless") #無頭模式
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_argument("--disable-gpu")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+        # chrome_options = webdriver.ChromeOptions()
+        # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        # chrome_options.add_argument("--headless") #無頭模式
+        # chrome_options.add_argument("--disable-dev-shm-usage")
+        # chrome_options.add_argument("--no-sandbox")
+        # chrome_options.add_argument("--disable-notifications")
+        # chrome_options.add_argument("--disable-gpu")
+        # driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
-        #driver = webdriver.Chrome('D:\chromedriver', chrome_options=chrome_options) #windows
+        driver = webdriver.Chrome('D:\chromedriver') #windows
 
         driver.get('https://www.facebook.com/')
 
@@ -87,9 +82,6 @@ def job():
         time.sleep(1)
 
         element.submit()
-
-        # button = driver.find_element_by_class_name('_42ft._4jy0._6lth._4jy6._4jy1.selected._51sy')
-        # button.click()
         time.sleep(7)
 
         driver.get('https://www.facebook.com/myatcc')
@@ -103,9 +95,7 @@ def job():
         Soup = BeautifulSoup(driver.page_source, 'html.parser')
         time.sleep(7)
         timess = Soup.find_all('a', class_ = 'oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 b1v8xokw') #找出所有連結
-        print(timess)
 
-        #global month#
         times = []
         for i in range(len(timess)):
             times.append(timess[i].get('aria-label'))
@@ -145,8 +135,6 @@ def job():
                 part = times[i][:p-1]
                 ll[0] = part
                 times[i] = cal(ll)
-        
-        print(times)
 
         mini = 1000000
         for i in range(len(times)): #找出最近的發文時間
@@ -161,8 +149,6 @@ def job():
                     mini = i
                 if int(times[i]) < int(times[mini]):
                     mini = i
-        
-        print(mini)
 
         global url
         global code
@@ -170,8 +156,6 @@ def job():
         jj = url.index('?')
         codecp = url[:jj]
         url = codecp
-
-        print(codecp)
 
         if codecp != code:
             code = codecp
@@ -184,7 +168,6 @@ def job():
         
             global text
             text = []
-            #buft = Soup.find_all('div', class_ = 'ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a') #找出所有貼文的文章存成list # kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql
             buft = Soup.findAll('div', {'class':['ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a', 'kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql']})
             print(len(buft))
             buf = buft[0].find_all('div')
@@ -192,7 +175,6 @@ def job():
             buf1 = []
             for i in range(len(buf)):
                 buf1.append(buf[i].text)
-            print(buf1)
 
             str1 = ''
             str1 = ''.join(buf1)
@@ -223,5 +205,4 @@ def job():
 t = threading.Thread(target = job)
 t.start()
 auto_send.start()
-client.run('OTQ0MzIzODA4NDAyMjE0OTYz.Yg_8FA.H5TDRqYseu2_pxZr2AOl352xkMw') #ATCC
-#client.run('OTQ0OTA0NTE1OTMxNDg4MzA3.YhIY6A.77R8o7R8qRvmiQDMcHPtyAyUseE') #DC Bot
+client.run('你的Bot Token')
